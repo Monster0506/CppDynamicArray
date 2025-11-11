@@ -1,6 +1,7 @@
-#include <vcruntime_new.h>
-
+#include <cstddef>
+#include <iostream>
 #include <utility>
+
 template <typename T>
 class Array {
    public:
@@ -11,6 +12,7 @@ class Array {
     }
 
     void push_back(const T& value) {
+        std::cout << "Pushing back" << std::endl;
         if (size_ == capacity_) grow();
         new (data_ + size_) T(value);
         ++size_;
@@ -24,6 +26,7 @@ class Array {
     T* data_;
 
     void grow() {
+        std::cout << "Growing back" << std::endl;
         size_t newCap = capacity_ == 0 ? 2 : capacity_ * 2;
 
         T* newData = static_cast<T*>(::operator new(newCap * sizeof(T)));
