@@ -1,3 +1,6 @@
+#include <vcruntime_new.h>
+
+#include <utility>
 template <typename T>
 class Array {
    public:
@@ -20,5 +23,17 @@ class Array {
     size_t capacity_;
     T* data_;
 
-    void grow();
+    void grow() {
+        size_t newCap = capacity_ == 0 ? 2 : capacity_ * 2;
+
+        T* newData = static_cast<T*>(::operator new(newCap * sizeof(T)));
+        for (size_t i = 0; i < size_; ++i) {
+            new (newData + i) T(std::move(data_[i]));
+            data_[i].~T();
+        }
+
+        ::operator delete(data_);
+        data_ = newData;
+        capacity_ = newCap;
+    }
 };
