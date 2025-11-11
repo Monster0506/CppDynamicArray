@@ -1,8 +1,11 @@
 template <typename T>
 class Array {
    public:
-    Array();
-    ~Array();
+    Array() : data_(nullptr), capacity_(0), size_(0) {}
+    ~Array() {
+        for (size_t i = 0; i < size_; i++) data_[i].~T();
+        ::operator delete(data_);
+    }
 
     void push_back(const T& value);
     size_t size() const { return size_; }
@@ -12,4 +15,6 @@ class Array {
     size_t size_;
     size_t capacity_;
     T* data_;
+
+    void grow();
 };
