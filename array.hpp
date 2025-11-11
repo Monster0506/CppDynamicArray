@@ -7,7 +7,11 @@ class Array {
         ::operator delete(data_);
     }
 
-    void push_back(const T& value);
+    void push_back(const T& value) {
+        if (size_ == capacity_) grow();
+        new (data_ + size_) T(value);
+        ++size_;
+    }
     size_t size() const { return size_; }
     T& operator[](size_t i) { return data_[i]; }
 
